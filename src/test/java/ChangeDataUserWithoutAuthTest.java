@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import io.qameta.allure.junit4.DisplayName;
 
-public class ChangeDataUserWithoutAuth {
+public class ChangeDataUserWithoutAuthTest {
     UserClient userClient = new UserClient();
     private static String baseURI = "https://stellarburgers.nomoreparties.site";
 

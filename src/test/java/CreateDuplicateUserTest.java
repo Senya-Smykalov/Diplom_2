@@ -1,34 +1,32 @@
 import io.qameta.allure.Description;
 import io.restassured.RestAssured;
-import org.example.User;
 import org.example.UserClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+import io.qameta.allure.junit4.DisplayName;
 
-public class createDuplicateUser {
+public class CreateDuplicateUserTest {
     UserClient userClient = new UserClient();
     private static String baseURI = "https://stellarburgers.nomoreparties.site";
+
     @Before
     public void setUp() {
         RestAssured.baseURI = baseURI;
+        userClient.createUser();
     }
 
     @DisplayName("Повторное создание пользователя")
     @Description("Негативный сценарий - попытка создать дубль уже существующего пользователя")
     @Test
 
-    public void createDuplicateUser(){
-        User user = new User("muBest@exmaple.com", "zxcvbnm", "Jonny  ");
-        userClient.createUser(user);
-        userClient.createDuplicateUser(user);
+    public void createDuplicateUser() {
+        userClient.createDuplicateUser();
     }
 
     @After
-    public void deleteUser(){
-        User user = new User("muBest@exmaple.com", "zxcvbnm", "Jonny  ");
-        String accessToken = userClient.authUser(user).extract().jsonPath().getString("accessToken");
+    public void deleteUser() {
+        String accessToken = userClient.authUser().extract().jsonPath().getString("accessToken");
         userClient.deleteUser(accessToken);
     }
 

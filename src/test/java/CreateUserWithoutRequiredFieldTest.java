@@ -1,12 +1,11 @@
 import io.qameta.allure.Description;
 import io.restassured.RestAssured;
-import model.User;
 import org.example.UserClient;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+import io.qameta.allure.junit4.DisplayName;
 
-public class CreateUserWithoutRequiredField {
+public class CreateUserWithoutRequiredFieldTest {
     UserClient userClient = new UserClient();
     private static String baseURI = "https://stellarburgers.nomoreparties.site";
 
@@ -14,12 +13,12 @@ public class CreateUserWithoutRequiredField {
     public void setUp() {
         RestAssured.baseURI = baseURI;
     }
+
     @DisplayName("Создание пользователя без обязательного поля")
     @Description("Негативный сценарий - попытка создать клиента без обязательного поля")
     @Test
-    public void createUserWithoutRequiredField(){
-        User user = new User("muBest@exmaple.com", "zxcvbnm", "");
-        userClient.createUserWithoutRequiredField(user);
+    public void createUserWithoutRequiredField() {
+        userClient.createUserWithoutRequiredField();
     }
 
 }
