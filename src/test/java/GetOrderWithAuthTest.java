@@ -19,7 +19,7 @@ public class GetOrderWithAuthTest {
         RestAssured.baseURI = baseURI;
         userClient.createUser();
         accessToken = userClient.authUser().extract().jsonPath().getString("accessToken");
-        orderClient.createOrderWithAuth(accessToken);
+        orderClient.createOrderWithAuth(1, 2,  "Бессмертный метеоритный бургер",accessToken);
     }
 
     @DisplayName("Получение заказа пользователя с авторизацией")

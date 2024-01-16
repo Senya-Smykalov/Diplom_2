@@ -23,7 +23,7 @@ public class CreateOrderWithoutAuthTest {
     @Description("Позитивная проверка - создание заказа пользователем без авторизации")
     @Test
     public void createOrderWithoutAuth() {
-        orderClient.createOrderWithoutAuth();
+        orderClient.createOrderWithoutAuth(1, 2,  "Бессмертный метеоритный бургер");
     }
 
     @After

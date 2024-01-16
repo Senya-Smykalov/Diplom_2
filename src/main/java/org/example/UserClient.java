@@ -17,7 +17,7 @@ public class UserClient {
     public static final String deleteUserEndPoint = "/api/auth/user";
     public static final String dataChangeEndPoint = "/api/auth/user";
     private static final File newDataUser = new File("src/test/resources/newDataUser.json");
-    private static User user = new User("muBest@exmaple.com", "zxcvbnm", "Jonny");
+    private static User user = new User("muBest456@exmaple.com", "zxcvbnmzz", "JonnyBravo");
     static Header header = new Header("Content-type", "application/json");
     private static final User badUser = new User("muBesttttt@exmaple.com", "zxcvbnm123", "Smitt");
     private static final User userWithoutField = new User("muBest@exmaple.com", "zxcvbnm", "");

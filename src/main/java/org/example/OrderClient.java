@@ -2,8 +2,10 @@ package org.example;
 
 import io.qameta.allure.Step;
 import io.restassured.http.Header;
+import io.restassured.response.Response;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -12,41 +14,66 @@ import static org.hamcrest.Matchers.notNullValue;
 public class OrderClient {
     public static final String createOrderEndPoint = "/api/orders";
     public static final String getUserOrderEndPoint = "/api/orders";
+
+    public static final String getIngredientsEndPoint = "/api/ingredients";
+
     static Header header = new Header("Content-type", "application/json");
+
     private static final File createOrder = new File("src/test/resources/createOrder.json");
     private static final File createEmptyOrder = new File("src/test/resources/createEmptyOrder.json");
     private static final File createBadOrder = new File("src/test/resources/createBadOrder.json");
 
-
     @Step("Создание заказа авторизованным пользователем")
-    public void createOrderWithAuth(String accessToken) {
-        given()
-                .header("Authorization", accessToken)
+    public void createOrderWithAuth(int firstIngredient, int twoIngredient, String name, String accessToken) {
+        String firstComponent = getIngredient(firstIngredient);
+        String twoComponent = getIngredient(twoIngredient);
+        String bodyOrder = "{ \"ingredients\": [\"" + firstComponent + "\",\"" + twoComponent + "\"] }";
+        Response response = given()
                 .header(header)
-                .body(createOrder)
-                .post(createOrderEndPoint)
+                .header("Authorization", accessToken)
+                .body(bodyOrder)
+                .when()
+                .post(createOrderEndPoint);
+        response
                 .then()
-                .log()
-                .all()
                 .statusCode(200)
-                .body("name", equalTo("Метеоритный бургер"))
-                .body("order.number", notNullValue())
-                .body("success", equalTo(true));
+                .body("success", equalTo(true), "name", equalTo(name), "order.number", notNullValue());
+    }
+
+    @Step("Получение списка ингредиентов")
+    public String getIngredient(int id) {
+
+        Response response = given()
+                .header(header)
+                .get(getIngredientsEndPoint);
+        response
+                .then()
+                .statusCode(200)
+                .body("success", equalTo(true))
+                .body("data._id", notNullValue());
+
+
+        ArrayList<String> allIdsIngr = response.jsonPath().get("data._id");
+        String idIngr = allIdsIngr.get(id);
+        System.out.println(idIngr);
+        return idIngr;
+
     }
 
     @Step("Создание заказа пользователем без авторизации")
-    public void createOrderWithoutAuth() {
-        given()
+    public void createOrderWithoutAuth(int firstIngredient, int twoIngredient, String name) {
+        String firstComponent = getIngredient(firstIngredient);
+        String twoComponent = getIngredient(twoIngredient);
+        String bodyOrder = "{ \"ingredients\": [\"" + firstComponent + "\",\"" + twoComponent + "\"] }";
+        Response response = given()
                 .header(header)
-                .body(createOrder)
-                .post(createOrderEndPoint)
+                .body(bodyOrder)
+                .when()
+                .post(createOrderEndPoint);
+        response
                 .then()
-                .log()
-                .all()
                 .statusCode(200)
-                .body("name", equalTo("Метеоритный бургер"))
-                .body("order.number", notNullValue())
-                .body("success", equalTo(true));
+                .body("success", equalTo(true), "name", equalTo(name), "order.number", notNullValue());
     }
 
     @Step("Создание заказа,список ингредиентов - пуст")

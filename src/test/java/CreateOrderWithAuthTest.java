@@ -1,11 +1,11 @@
 import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import org.example.OrderClient;
 import org.example.UserClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import io.qameta.allure.junit4.DisplayName;
 
 public class CreateOrderWithAuthTest {
     UserClient userClient = new UserClient();
@@ -18,6 +18,7 @@ public class CreateOrderWithAuthTest {
     public void setUp() {
         RestAssured.baseURI = baseURI;
         userClient.createUser();
+
     }
 
     @DisplayName("Cоздание заказа пользователем с авторизацией")
@@ -25,7 +26,7 @@ public class CreateOrderWithAuthTest {
     @Test
     public void createOrderWithAuth() {
         accessToken = userClient.authUser().extract().jsonPath().getString("accessToken");
-        orderClient.createOrderWithAuth(accessToken);
+        orderClient.createOrderWithAuth(1, 2,  "Бессмертный метеоритный бургер",accessToken);
     }
 
 
